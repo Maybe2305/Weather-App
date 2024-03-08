@@ -20,6 +20,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 import ru.netology.weatherapp.data.WeatherModel
+import ru.netology.weatherapp.screens.DialogSearch
 import ru.netology.weatherapp.screens.MainCard
 import ru.netology.weatherapp.screens.TabLayout
 import ru.netology.weatherapp.ui.theme.WeatherAppTheme
@@ -35,6 +36,10 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf(listOf<WeatherModel>())
                 }
 
+                val dialogState = remember {
+                    mutableStateOf(false)
+                }
+
                 val currentDay = remember {
                     mutableStateOf(WeatherModel(
                         "",
@@ -48,8 +53,20 @@ class MainActivity : ComponentActivity() {
                     )
                     )
                 }
+                val city = remember {
+                    mutableStateOf("Moscow")
+                }
 
-                getData("Moscow", this, daysList, currentDay)
+                if (dialogState.value) {
+                    DialogSearch(
+                        dialogState,
+                        onSubmit = {
+                            city.value = it
+                            getData(it, this, daysList, currentDay)
+                        })
+                }
+
+                getData(city.value, this, daysList, currentDay)
                 Image(
                     painter = painterResource(id = R.drawable.weather_app_bg),
                     contentDescription = "im1",
@@ -60,7 +77,9 @@ class MainActivity : ComponentActivity() {
                 )
                 Column {
 
-                    MainCard(currentDay)
+                    MainCard(currentDay, onClickSync = {
+                        getData("Moscow", this@MainActivity, daysList, currentDay)
+                    }, onClickSearch = { dialogState.value = true })
                     TabLayout(daysList, currentDay)
 
                 }

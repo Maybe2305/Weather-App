@@ -47,7 +47,7 @@ import ru.netology.weatherapp.data.WeatherModel
 import ru.netology.weatherapp.ui.theme.Phone
 
 @Composable
-fun MainCard(currentDay: MutableState<WeatherModel>) {
+fun MainCard(currentDay: MutableState<WeatherModel>, onClickSync: () -> Unit, onClickSearch: () -> Unit) {
 
     Column(
         modifier = Modifier
@@ -116,6 +116,7 @@ fun MainCard(currentDay: MutableState<WeatherModel>) {
 
                     IconButton(
                         onClick = {
+                            onClickSearch.invoke()
                     }
                     ) {
 
@@ -137,6 +138,7 @@ fun MainCard(currentDay: MutableState<WeatherModel>) {
 
                     IconButton(
                         onClick = {
+                            onClickSync.invoke()
                         }
                     ) {
 
